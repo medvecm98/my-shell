@@ -124,13 +124,17 @@ you start your shell from.
 - ^C (= SIGINT) in the prompt kills the current unfinished line and
   offers a new prompt (same way as bash does it).  E.g:
 
+	```
 	mysh$ ls xxx^C
 	mysh$
+	```
 
 - An empty command just prints a new prompt (as bash does it).  E.g.
 
+	```
 	mysh$ <SPACE><SPACE><SPACE><ENTER>
 	mysh$
+	```
 
 - Implement simple foreground command execution.  Commands may be
   separated with a semicolon.  Any number of commands separated by a
@@ -140,46 +144,60 @@ you start your shell from.
 	- i.e. "cmd [; cmd2 [; cmd3 ...]]]
 	- for example:
 
+	```
 	mysh$ date
 	Mon Oct  8 04:51:27 PDT 2018
 	mysh$
+	```
 
+	```
 	mysh$ /usr/bin/echo X
 	X
 	mysh$
+	```
 
+	```
 	mysh$ echo X; date; echo Z
 	X
 	Monday, October  8, 2018 at 11:36:04 AM CEST
 	Z
 	mysh$
+	```
 
   Whitespace does not matter with the semicolon, i.e.:
 
+	```
 	mysh$ echo X;date;echo Z
 	X
 	Monday, October  8, 2018 at 11:36:04 AM CEST
 	Z
 	mysh$
+	```
 
 - A semicolon after the last command is legal (as is in bash).  E.g:
 
+	```
 	mysh$ echo x;
 	x
+	```
 
   However, the following is not legal:
 
+	```
 	mysh$ date;;
 	error:1: syntax error near unexpected token ';'
 	mysh$
+	```
 
 - Implement an internal "exit" to exit the shell.  E.g.:
 
+	```
 	Bash$ ./mysh
 	mysh$ exit
 	Bash$ echo $?
 	0
 	Bash$
+	```
 
   The internal exit command does not change the shell's return value set
   from a previous command execution.  See below for more information.
@@ -198,6 +216,7 @@ you start your shell from.
 
   E.g.:
 
+	```
 	mysh$ pwd
 	/data/maish
 	mysh$ cd
@@ -214,28 +233,35 @@ you start your shell from.
 	/data/maish
 	mysh$ pwd
 	/data/maish
+	```
 
 - The "-c" option is supported as in any other usual shell.
 
   E.g.:
 
+	```
 	Bash$ mysh -c "echo XXX; date"
 	XXX
 	Monday, October  8, 2018 at  1:36:56 PM CEST
 	Bash$
+	```
 
 - The '#" comment is supported. E.g.:
 
+	```
 	mysh$ echo X # comment
 	X
 	mysh$     # another comment
 	mysh$
+	```
 
 	Or:
 
+	```
 	./mysh -c 'date; echo X # comment'
 	Wednesday, October 10, 2018 at 10:10:09 AM CEST
 	X
+	```
 
 	Comments must also work in the non-interactive mode, see below.
 
