@@ -7,39 +7,20 @@
 #include <errno.h>
 #include <sys/wait.h>
 #include <string.h>
+#include "parser.tab.h"
+#include "lex.yy.h"
+#include "my_list.h"
+#include "shell_utils.h"
 
 extern char **environ;
-
-int
-find_in_path(const char* executable) {
-	char* path = getenv("PATH");
-	if (!path) {
-		printf("PATH variable is not set.");
-	}
-	char* token = strtok(path, ":");
-	while (token) {
-		char* output = malloc(256);
-		snprintf(output, strlen(token) + strlen(executable) + 2, "%s/%s", token, executable);
-		printf("Executing ... %s \n", output);
-		execl(output, NULL);
-		token = strtok(NULL, ":");
-	}
-}
+extern int yyparse();
+extern int parser_aa;
+extern YY_BUFFER_STATE yy_scan_buffer(const char* str);
 
 int
 main(int argc, char ** argv) {
-    while (1) {
-        char* line = readline("mysh> ");
-        int pid = fork();
-        if (pid == 0) {
-			find_in_path(line);
-			warn("mysh: %s", line);
-        }
-        else {
-			int wstatus;
-            waitpid(pid, &wstatus, 0);
-        }
-        free(line);
-    }
+	yy_scan_buffer("ls -la");
+	yyparse();
+	printf("%d\n", parser_aa);
     return 0;
 }
