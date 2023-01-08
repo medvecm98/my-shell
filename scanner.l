@@ -1,8 +1,12 @@
 %{
-#include "parser.tab.h"
-%}
+    enum yytokentype {
+        PRARG = 258,
+        SEMIC = 259,
+        EOL = 260
+    };
 
-%option header-file="lex.yy.h"
+    char* yylval;
+%}
 
 %%
 
@@ -10,8 +14,8 @@
 
 \n			{ return EOL; }
 
-[^ \t]		{ yylval = yytext; return PRARG; }
+[^ \t\n]+	{ yylval = yytext; return PRARG; }
 
-<<EOF>>		{ return EOL; }
+[ \t\n]+    {}
 
 %%

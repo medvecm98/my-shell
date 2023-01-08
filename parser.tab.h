@@ -44,6 +44,14 @@
 #if YYDEBUG
 extern int yydebug;
 #endif
+/* "%code requires" blocks.  */
+#line 8 "parser.y"
+
+#include <sys/queue.h>
+#include <stdio.h>
+
+
+#line 55 "parser.tab.h"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE

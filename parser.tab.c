@@ -67,11 +67,10 @@
 
 
 /* First part of user prologue.  */
-#line 7 "parser.y"
+#line 5 "parser.y"
 
-#include "my_list.h"
 
-#line 75 "parser.tab.c"
+#line 74 "parser.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -108,12 +107,27 @@ enum yysymbol_kind_t
   YYSYMBOL_YYACCEPT = 6,                   /* $accept  */
   YYSYMBOL_command = 7,                    /* command  */
   YYSYMBOL_first_subcommand = 8,           /* first_subcommand  */
-  YYSYMBOL_subcommand = 9                  /* subcommand  */
+  YYSYMBOL_subcommand = 9,                 /* subcommand  */
+  YYSYMBOL_tail_args = 10                  /* tail_args  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
 
 
+/* Unqualified %code blocks.  */
+#line 14 "parser.y"
+
+
+struct entry {
+    char* prarg;
+    LIST_ENTRY(entry) entries;
+};
+
+struct listhead head;
+struct entry* last;
+
+
+#line 131 "parser.tab.c"
 
 #ifdef short
 # undef short
@@ -434,18 +448,18 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  6
+#define YYFINAL  7
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   5
+#define YYLAST   6
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  6
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  4
+#define YYNNTS  5
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  7
+#define YYNRULES  8
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  10
+#define YYNSTATES  12
 
 /* YYMAXUTOK -- Last valid token kind.  */
 #define YYMAXUTOK   260
@@ -495,7 +509,7 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    13,    13,    14,    15,    18,    21,    22
+       0,    30,    30,    31,    32,    35,    38,    41,    42
 };
 #endif
 
@@ -512,7 +526,8 @@ static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
 static const char *const yytname[] =
 {
   "\"end of file\"", "error", "\"invalid token\"", "PRARG", "SEMIC",
-  "EOL", "$accept", "command", "first_subcommand", "subcommand", YY_NULLPTR
+  "EOL", "$accept", "command", "first_subcommand", "subcommand",
+  "tail_args", YY_NULLPTR
 };
 
 static const char *
@@ -536,7 +551,8 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -1,    -1,     3,    -4,    -5,    -5,    -5,    -1,    -5,    -5
+      -1,     0,     4,    -4,    -5,     0,    -5,    -5,    -1,    -5,
+      -5,    -5
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -544,19 +560,20 @@ static const yytype_int8 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       2,     6,     0,     0,     5,     7,     1,     2,     3,     4
+       2,     8,     0,     0,     5,     8,     6,     1,     2,     3,
+       7,     4
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -5,    -3,    -5,     4
+      -5,    -3,    -5,    -5,     1
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     2,     3,     4
+       0,     2,     3,     4,     6
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -564,31 +581,32 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-       7,     8,     1,     6,     9,     5
+       8,     9,     1,     5,     7,    11,    10
 };
 
 static const yytype_int8 yycheck[] =
 {
-       4,     5,     3,     0,     7,     1
+       4,     5,     3,     3,     0,     8,     5
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     3,     7,     8,     9,     9,     0,     4,     5,     7
+       0,     3,     7,     8,     9,     3,    10,     0,     4,     5,
+      10,     7
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,     6,     7,     7,     7,     8,     9,     9
+       0,     6,     7,     7,     7,     8,     9,    10,    10
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     0,     2,     3,     1,     1,     2
+       0,     2,     0,     2,     3,     1,     2,     2,     0
 };
 
 
@@ -1051,20 +1069,32 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-  case 6: /* subcommand: PRARG  */
-#line 21 "parser.y"
-                  { yyval = yyvsp[0]; list_add(yyvsp[0]); }
-#line 1058 "parser.tab.c"
+  case 5: /* first_subcommand: subcommand  */
+#line 35 "parser.y"
+                             { printf("list init\n"); LIST_INIT(&head); }
+#line 1076 "parser.tab.c"
     break;
 
-  case 7: /* subcommand: PRARG subcommand  */
-#line 22 "parser.y"
-                                     { yyval = yyvsp[-1]; list_add(yyvsp[-1]); }
-#line 1064 "parser.tab.c"
+  case 6: /* subcommand: PRARG tail_args  */
+#line 38 "parser.y"
+                            { struct entry* e = malloc(struct entry*); e->prarg = yyvsp[-1]; LIST_INSERT_HEAD(&head, e, entries); last = e; }
+#line 1082 "parser.tab.c"
+    break;
+
+  case 7: /* tail_args: PRARG tail_args  */
+#line 41 "parser.y"
+                           { struct entry* e = malloc(struct entry*); e->prarg = yyvsp[-1]; LIST_INSERT_AFTER(e, last, entries); last = e; }
+#line 1088 "parser.tab.c"
+    break;
+
+  case 8: /* tail_args: %empty  */
+#line 42 "parser.y"
+                   { printf("end of list\n"); }
+#line 1094 "parser.tab.c"
     break;
 
 
-#line 1068 "parser.tab.c"
+#line 1098 "parser.tab.c"
 
       default: break;
     }
@@ -1257,5 +1287,5 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 25 "parser.y"
+#line 45 "parser.y"
 
